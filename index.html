@@ -64,12 +64,10 @@
 </head>
 <body>
   <div class="container">
-    
-<div style="text-align:center; margin-bottom: 20px;">
-  <img src="PYLlogonoBG.png" alt="Press Your Luck Logo" style="max-width: 300px; width: 100%; height: auto;" />
-</div>
-
-  <div id="setupScreen">
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="PYLlogonoBG.png" alt="Press Your Luck Logo" style="max-width: 300px; width: 100%; height: auto;" />
+    </div>
+    <div id="setupScreen">
       <h2>Game Setup - Press Your Luck</h2>
       <div id="playerInputs"></div>
       <label for="roundSelector">Number of Rounds:
@@ -87,9 +85,9 @@
       <button onclick="removePlayer()">- Remove Player</button><br/>
       <button onclick="startGame()">Start Game</button>
       <button onclick="fillTestData()">Fill Random Test Data</button>
-    <p style="text-align:center; margin-top: 10px; font-size: 0.9em; color: #bbb;">
-  Version <strong>v1.0.7</strong> – Round-Locked Order Edition
-</p>
+      <p style="text-align:center; margin-top: 10px; font-size: 0.9em; color: #bbb;">
+        Version <strong>v1.0.8</strong> – Scoped Fail Patch 🛡️
+      </p>
     </div>
 
     <div id="gameScreen" class="hidden">
@@ -240,10 +238,10 @@
     }
 
     function failPress() {
-      currentPYL.score = 0;
-      currentPYL.streak = 0;
       currentPYL.finalScore = -1;
       currentPYL.totalScore += currentPYL.finalScore;
+      currentPYL.score = 0;
+      currentPYL.streak = 0;
       showTurnComplete();
     }
 
@@ -281,4 +279,3 @@
   </script>
 </body>
 </html>
-

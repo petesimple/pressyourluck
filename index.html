@@ -223,20 +223,15 @@
     }
 
     function pressLuck() {
-  if (opponentIndex >= currentPlayerCount - 1) {
-    walkAway();
-    return;
-  }
-
   currentPYL.streak += 1;
   currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
-  opponentIndex++;
 
-  if (opponentIndex >= currentPlayerCount - 1) {
-    walkAway();
-  } else {
-    updateDisplay();
+  opponentIndex++;
+  if (opponentIndex >= opponents.length) {
+    opponentIndex = 0; // Loop back to the first opponent
   }
+
+  updateDisplay();
 }
 
     function walkAway() {

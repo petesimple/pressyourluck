@@ -1,12 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#ffcc00" />
-  <link rel="icon" href="icon-192.png" type="image/png" />
   <title>Press Your Luck Scoreboard</title>
+  <link rel="manifest" href="./manifest.json" />
+  <meta name="theme-color" content="#ffcc00" />
+  <link rel="icon" href="./icon-192.png" type="image/png" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -63,12 +64,18 @@
 </head>
 <body>
   <div class="container">
-    <div style="text-align:center; margin-bottom: 20px;">
-  <img src="PYLlogonoBG.png" alt="Press Your Luck Logo" style="max-width: 300px; width: 100%; height: auto;" />
-</div>
     <div id="setupScreen">
       <h2>Game Setup - Press Your Luck</h2>
       <div id="playerInputs"></div>
+      <label for="roundSelector">Number of Rounds:
+        <select id="roundSelector">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label><br/>
       <button onclick="addPlayer()">+ Add Player</button>
       <button onclick="removePlayer()">- Remove Player</button><br/>
       <button onclick="startGame()">Start Game</button>
@@ -79,8 +86,8 @@
       <h2>Press Your Luck Scoreboard</h2>
       <div class="controls">
         <button onclick="pressLuck()">Press Your Luck</button>
-        <button onclick="failPress()">Fail</button>
         <button onclick="walkAway()">Walk Away</button>
+        <button onclick="failPress()">Fail</button>
       </div>
       <div class="scoreboard">
         <div class="column" id="playerColumn"><strong>Player</strong></div>
@@ -103,6 +110,9 @@
     let players = [];
     let opponentIndex = 0;
     let currentPlayerCount = 3;
+
+    let currentRound = 1;
+    let totalRounds = 1;
 
     const testNamesPool = ["Zane", "Maya", "Leo", "Aria", "Nico", "Luna", "Kai", "Nova"];
 
@@ -146,6 +156,9 @@
 
     function startGame() {
       allPlayers = [];
+      totalRounds = parseInt(document.getElementById('roundSelector').value);
+      currentRound = 1;
+
       for (let i = 0; i < currentPlayerCount; i++) {
         const name = document.getElementById(`name${i}`).value.trim();
         const rating = parseInt(document.getElementById(`rating${i}`).value);
@@ -153,17 +166,26 @@
           alert("Please enter valid names and ratings for all players.");
           return;
         }
-        allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0 });
+        allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0 });
       }
 
-      pylQueue = [...allPlayers];
       document.getElementById('setupScreen').classList.add('hidden');
+      startRound();
+    }
+
+    function startRound() {
+      pylQueue = [...allPlayers];
       startTurn();
     }
 
     function startTurn() {
       if (pylQueue.length === 0) {
-        showFinalStandings();
+        currentRound++;
+        if (currentRound > totalRounds) {
+          showFinalStandings();
+        } else {
+          startRound();
+        }
         return;
       }
 
@@ -198,7 +220,16 @@
 
     function walkAway() {
       currentPYL.finalScore = currentPYL.score;
+      currentPYL.totalScore += currentPYL.finalScore;
       currentPYL.streak = 0;
+      showTurnComplete();
+    }
+
+    function failPress() {
+      currentPYL.score = 0;
+      currentPYL.streak = 0;
+      currentPYL.finalScore = -1;
+      currentPYL.totalScore += currentPYL.finalScore;
       showTurnComplete();
     }
 
@@ -206,7 +237,7 @@
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('turnCompleteScreen').classList.remove('hidden');
       document.getElementById('turnSummaryText').textContent =
-        `${currentPYL.name}'s turn is complete! Final Score: ${currentPYL.finalScore}`;
+        `${currentPYL.name}'s turn is complete! Round Score: ${currentPYL.finalScore} | Total: ${currentPYL.totalScore}`;
     }
 
     function nextTurn() {
@@ -227,37 +258,32 @@
     }
 
     function showFinalStandings() {
-      let standings = "Final Standings\n\n";
-      allPlayers.sort((a, b) => b.finalScore - a.finalScore);
+      let standings = "FINAL STANDINGS\n\n";
+      allPlayers.sort((a, b) => b.totalScore - a.totalScore);
       allPlayers.forEach((p, i) => {
-        standings += `${i + 1}. ${p.name}: ${p.finalScore}\n`;
+        standings += `${i + 1}. ${p.name}: ${p.totalScore}\n`;
       });
       alert(standings);
 
-      let csv = "Player,Rating,Final Score\n";
+      let csv = "Player,Rating,Total Score\n";
       allPlayers.forEach(p => {
-        csv += `${p.name},${p.rating},${p.finalScore}\n`;
+        csv += `${p.name},${p.rating},${p.totalScore}\n`;
       });
 
       const blob = new Blob([csv], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "pyl_final_scores.csv";
+      a.download = "pyl_total_scores.csv";
       a.click();
       URL.revokeObjectURL(url);
     }
-    function failPress() {
-  currentPYL.score = 0;
-  currentPYL.streak = 0;
-  currentPYL.finalScore = -1;
-  showTurnComplete();
-}
-//PWA section
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log("Service Worker registered"));
-  }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').then(() => {
+        console.log("Service Worker Registered");
+      });
+    }
   </script>
 </body>
 </html>

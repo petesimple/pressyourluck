@@ -72,6 +72,7 @@
         </select>
       </label><br/>
       <button onclick="startGame()">Start Game</button>
+      <button onclick="fillTestData()">Fill Random Test Data</button>
     </div>
 
     <!-- GAME SCREEN -->
@@ -183,6 +184,14 @@
         document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
       });
     }
+    //TESTING DATA SECTION
+    function fillTestData() {
+  const testNames = ["Zane", "Maya", "Leo", "Aria", "Nico", "Luna", "Kai", "Nova"];
+  for (let i = 0; i < 8; i++) {
+    document.getElementById(`name${i}`).value = testNames[i];
+    document.getElementById(`rating${i}`).value = Math.floor(Math.random() * 1000) + 100;
+  }
+}
   </script>
 </body>
 </html>

@@ -111,6 +111,13 @@
       <h2 id="turnSummaryText">Turn Complete!</h2>
       <button onclick="nextTurn()">Next Challenger</button>
     </div>
+    <div id="finalResultsScreen" class="hidden">
+  <h2>🏁 Game Over – Final Standings 🏆</h2>
+  <div id="finalStandingsList" style="text-align:left; margin-top: 20px;"></div>
+  <div style="text-align:center; margin-top: 20px;">
+    <button onclick="location.reload()">Start New Game</button>
+  </div>
+</div>
   </div>
 
   <script>
@@ -286,6 +293,19 @@
         console.log("Service Worker Registered");
       });
     }
+
+  function showFinalStandings() {
+  allPlayers.sort((a, b) => b.totalScore - a.totalScore);
+  const list = allPlayers.map((p, i) => {
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
+    return `${medal} ${p.name} – ${p.totalScore} pts`;
+  }).join("<br/>");
+
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("turnCompleteScreen").classList.add("hidden");
+  document.getElementById("finalStandingsList").innerHTML = list;
+  document.getElementById("finalResultsScreen").classList.remove("hidden");
+}
   </script>
 </body>
 </html>

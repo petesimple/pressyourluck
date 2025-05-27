@@ -1,11 +1,11 @@
 
 const CACHE_NAME = "pyl-scoreboard-cache-v1";
 const urlsToCache = [
-  "press_your_luck_dynamic_players.html",
-  "manifest.json",
-  "icon-192.png",
-  "icon-512.png",
-  "PYLlogonoBG.png"
+  "./press_your_luck_dynamic_players.html",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./PYLlogonoBG.png"
 ];
 
 self.addEventListener("install", event => {

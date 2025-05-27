@@ -193,7 +193,7 @@
     }
 
     function startRound() {
-      roundOrder = [...allPlayers].sort((a, b) => a.rating - b.rating);
+      roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
       pylQueue = [...roundOrder];
       startTurn();
     }

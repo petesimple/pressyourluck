@@ -84,6 +84,7 @@
 
     <div id="gameScreen" class="hidden">
       <h2>Press Your Luck Scoreboard</h2>
+      <div id="roundTracker" style="text-align:center; margin-bottom: 10px; font-weight: bold; font-size: 1.2em;"></div>
       <div class="controls">
         <button onclick="pressLuck()">Press Your Luck</button>
         <button onclick="walkAway()">Walk Away</button>
@@ -179,27 +180,31 @@
     }
 
     function startTurn() {
-      if (pylQueue.length === 0) {
-        currentRound++;
-        if (currentRound > totalRounds) {
-          showFinalStandings();
-        } else {
-          startRound();
-        }
-        return;
-      }
-
-      currentPYL = pylQueue.shift();
-      opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
-      opponentIndex = 0;
-      currentPYL.score = 0;
-      currentPYL.streak = 0;
-      players = [currentPYL, ...opponents];
-
-      document.getElementById('turnCompleteScreen').classList.add('hidden');
-      document.getElementById('gameScreen').classList.remove('hidden');
-      updateDisplay();
+  if (pylQueue.length === 0) {
+    currentRound++;
+    if (currentRound > totalRounds) {
+      showFinalStandings();
+    } else {
+      startRound();
     }
+    return;
+  }
+
+  currentPYL = pylQueue.shift();
+  opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
+  opponentIndex = 0;
+  currentPYL.score = 0;
+  currentPYL.streak = 0;
+  players = [currentPYL, ...opponents];
+
+  document.getElementById('turnCompleteScreen').classList.add('hidden');
+  document.getElementById('gameScreen').classList.remove('hidden');
+
+  // Set round tracker display
+  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
+
+  updateDisplay();
+}
 
     function pressLuck() {
       if (opponentIndex >= currentPlayerCount - 1) {
@@ -245,17 +250,20 @@
     }
 
     function updateDisplay() {
-      document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
-      document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
-      document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
+  document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
+  document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
+  document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
 
-      players.forEach(p => {
-        document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
-        document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
-        let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
-        document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
-      });
-    }
+  players.forEach(p => {
+    document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
+    document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
+    let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
+    document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
+  });
+
+  // Re-confirm round tracker
+  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
+}
 
     function showFinalStandings() {
       let standings = "FINAL STANDINGS\n\n";

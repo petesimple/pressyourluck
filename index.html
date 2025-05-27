@@ -44,8 +44,8 @@
       border-radius: 5px;
     }
     .column {
-      flex: 1;
-      padding: 0 10px;
+      flex: 1 1 20%;
+      padding: 0 5px;
     }
     .column strong {
       display: block;
@@ -99,10 +99,12 @@
         <button onclick="failPress()">Fail</button>
       </div>
       <div class="scoreboard">
-        <div class="column" id="playerColumn"><strong>Player</strong></div>
-        <div class="column" id="scoreColumn"><strong>Score</strong></div>
-        <div class="column" id="pressColumn"><strong>Press Streak</strong></div>
-      </div>
+  <div class="column" id="playerColumn"><strong>Player</strong></div>
+  <div class="column" id="ratingColumn"><strong>Rating</strong></div>
+  <div class="column" id="scoreColumn"><strong>Round Score</strong></div>
+  <div class="column" id="pressColumn"><strong>Streak</strong></div>
+  <div class="column" id="totalColumn"><strong>Total Score</strong></div>
+</div>
     </div>
 
     <div id="turnCompleteScreen" class="hidden">
@@ -257,19 +259,25 @@
     }
 
     function updateDisplay() {
-      document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
-      document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
-      document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
+  document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
+  document.getElementById("ratingColumn").innerHTML = "<strong>Rating</strong>";
+  document.getElementById("scoreColumn").innerHTML = "<strong>Round Score</strong>";
+  document.getElementById("pressColumn").innerHTML = "<strong>Streak</strong>";
+  document.getElementById("totalColumn").innerHTML = "<strong>Total Score</strong>";
 
-      players.forEach(p => {
-        document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
-        document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
-        let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
-        document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
-      });
+  players.forEach(p => {
+    document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
+    document.getElementById("ratingColumn").innerHTML += `<div>${p.rating}</div>`;
+    document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
 
-      document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
-    }
+    let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
+    document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
+    
+    document.getElementById("totalColumn").innerHTML += `<div>${p.totalScore}</div>`;
+  });
+
+  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
+}
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').then(() => {

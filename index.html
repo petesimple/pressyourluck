@@ -155,10 +155,19 @@
     }
 
     function walkAway() {
-      const current = players[0];
-      current.streak = 0;
-      updateDisplay();
-    }
+  const current = players[0];
+  current.streak = 0;
+
+  // Move to next opponent if any
+  if (players.length > 2) {
+    const opponent = players.splice(1, 1)[0]; // Remove next opponent
+    players.push(opponent); // Put them at the end for scoreboard display
+  } else {
+    alert("Round complete! All opponents faced.");
+  }
+
+  updateDisplay();
+}
   </script>
 </body>
 </html>

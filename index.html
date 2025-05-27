@@ -174,23 +174,26 @@
     }
 
     function startGame() {
-      allPlayers = [];
-      totalRounds = parseInt(document.getElementById('roundSelector').value);
-      currentRound = 1;
+  allPlayers = [];
+  totalRounds = parseInt(document.getElementById('roundSelector').value);
+  currentRound = 1;
 
-      for (let i = 0; i < currentPlayerCount; i++) {
-        const name = document.getElementById(`name${i}`).value.trim();
-        const rating = parseInt(document.getElementById(`rating${i}`).value);
-        if (!name || isNaN(rating)) {
-          alert("Please enter valid names and ratings for all players.");
-          return;
-        }
-        allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0 });
-      }
-
-      document.getElementById('setupScreen').classList.add('hidden');
-      startRound();
+  for (let i = 0; i < currentPlayerCount; i++) {
+    const name = document.getElementById(`name${i}`).value.trim();
+    const rating = parseInt(document.getElementById(`rating${i}`).value);
+    if (!name || isNaN(rating)) {
+      alert("Please enter valid names and ratings for all players.");
+      return;
     }
+    allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0 });
+  }
+
+  // 🔧 Fix for Round 1 ordering by rating
+  allPlayers.sort((a, b) => a.rating - b.rating);
+
+  document.getElementById('setupScreen').classList.add('hidden');
+  startRound();
+}
 
     function startRound() {
       roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);

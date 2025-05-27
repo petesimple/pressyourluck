@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,9 +70,11 @@
         <select id="roundSelector">
           <option value="1">1</option>
           <option value="2">2</option>
-          <option value="3" selected>3</option>
+          <option value="3">3</option>
           <option value="4">4</option>
           <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7" selected>7</option>
         </select>
       </label><br/>
       <button onclick="addPlayer()">+ Add Player</button>
@@ -114,6 +115,7 @@
 
     let currentRound = 1;
     let totalRounds = 1;
+    let roundOrder = [];
 
     const testNamesPool = ["Zane", "Maya", "Leo", "Aria", "Nico", "Luna", "Kai", "Nova"];
 
@@ -175,36 +177,34 @@
     }
 
     function startRound() {
-      pylQueue = [...allPlayers];
+      roundOrder = [...allPlayers].sort((a, b) => a.rating - b.rating);
+      pylQueue = [...roundOrder];
       startTurn();
     }
 
     function startTurn() {
-  if (pylQueue.length === 0) {
-    currentRound++;
-    if (currentRound > totalRounds) {
-      showFinalStandings();
-    } else {
-      startRound();
+      if (pylQueue.length === 0) {
+        currentRound++;
+        if (currentRound > totalRounds) {
+          showFinalStandings();
+        } else {
+          startRound();
+        }
+        return;
+      }
+
+      currentPYL = pylQueue.shift();
+      opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
+      opponentIndex = 0;
+      currentPYL.score = 0;
+      currentPYL.streak = 0;
+      players = [currentPYL, ...opponents];
+
+      document.getElementById('turnCompleteScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
+      updateDisplay();
     }
-    return;
-  }
-
-  currentPYL = pylQueue.shift();
-  opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
-  opponentIndex = 0;
-  currentPYL.score = 0;
-  currentPYL.streak = 0;
-  players = [currentPYL, ...opponents];
-
-  document.getElementById('turnCompleteScreen').classList.add('hidden');
-  document.getElementById('gameScreen').classList.remove('hidden');
-
-  // Set round tracker display
-  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
-
-  updateDisplay();
-}
 
     function pressLuck() {
       if (opponentIndex >= currentPlayerCount - 1) {
@@ -250,41 +250,18 @@
     }
 
     function updateDisplay() {
-  document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
-  document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
-  document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
+      document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
+      document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
+      document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
 
-  players.forEach(p => {
-    document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
-    document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
-    let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
-    document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
-  });
-
-  // Re-confirm round tracker
-  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
-}
-
-    function showFinalStandings() {
-      let standings = "FINAL STANDINGS\n\n";
-      allPlayers.sort((a, b) => b.totalScore - a.totalScore);
-      allPlayers.forEach((p, i) => {
-        standings += `${i + 1}. ${p.name}: ${p.totalScore}\n`;
-      });
-      alert(standings);
-
-      let csv = "Player,Rating,Total Score\n";
-      allPlayers.forEach(p => {
-        csv += `${p.name},${p.rating},${p.totalScore}\n`;
+      players.forEach(p => {
+        document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
+        document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
+        let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
+        document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
       });
 
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "pyl_total_scores.csv";
-      a.click();
-      URL.revokeObjectURL(url);
+      document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
     }
 
     if ('serviceWorker' in navigator) {

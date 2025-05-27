@@ -97,101 +97,137 @@
   </div>
 
   <script>
-    let allPlayers = [];
-    let pylQueue = [];
-    let currentPYL = null;
-    let opponents = [];
+let allPlayers = [];
+let pylQueue = [];
+let currentPYL = null;
+let opponents = [];
+let players = [];
+let opponentIndex = 0;
 
-    window.onload = () => {
-      const inputContainer = document.getElementById('playerInputs');
-      for (let i = 0; i < 8; i++) {
-        inputContainer.innerHTML += `
-          <div>
-            <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" />
-            <input type="number" id="rating${i}" placeholder="Rating" />
-          </div>
-        `;
-      }
-    };
+window.onload = () => {
+  const inputContainer = document.getElementById('playerInputs');
+  for (let i = 0; i < 8; i++) {
+    inputContainer.innerHTML += `
+      <div>
+        <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" />
+        <input type="number" id="rating${i}" placeholder="Rating" />
+      </div>
+    `;
+  }
+};
 
-    function startGame() {
-      allPlayers = [];
-      for (let i = 0; i < 8; i++) {
-        const name = document.getElementById(`name${i}`).value.trim();
-        const rating = parseInt(document.getElementById(`rating${i}`).value);
-        if (!name || isNaN(rating)) {
-          alert("Please enter valid names and ratings for all players.");
-          return;
-        }
-        allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0 });
-      }
-
-      pylQueue = [...allPlayers];
-      document.getElementById('setupScreen').classList.add('hidden');
-      startTurn();
+function startGame() {
+  allPlayers = [];
+  for (let i = 0; i < 8; i++) {
+    const name = document.getElementById(`name${i}`).value.trim();
+    const rating = parseInt(document.getElementById(`rating${i}`).value);
+    if (!name || isNaN(rating)) {
+      alert("Please enter valid names and ratings for all players.");
+      return;
     }
+    allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0 });
+  }
 
-    function startTurn() {
-      if (pylQueue.length === 0) {
-        alert("Game complete!");
-        return;
-      }
+  pylQueue = [...allPlayers];
+  document.getElementById('setupScreen').classList.add('hidden');
+  startTurn();
+}
 
-      currentPYL = pylQueue.shift();
-      opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
+function startTurn() {
+  if (pylQueue.length === 0) {
+    showFinalStandings();
+    return;
+  }
 
-      players = [currentPYL, ...opponents];
+  currentPYL = pylQueue.shift();
+  opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
+  opponentIndex = 0;
+  currentPYL.score = 0;
+  currentPYL.streak = 0;
+  players = [currentPYL, ...opponents];
 
-      document.getElementById('turnCompleteScreen').classList.add('hidden');
-      document.getElementById('gameScreen').classList.remove('hidden');
-      updateDisplay();
-    }
+  document.getElementById('turnCompleteScreen').classList.add('hidden');
+  document.getElementById('gameScreen').classList.remove('hidden');
+  updateDisplay();
+}
 
-    function pressLuck() {
-      currentPYL.streak += 1;
-      currentPYL.score += (currentPYL.streak * (currentPYL.streak + 1)) / 2;
-      updateDisplay();
-    }
+function pressLuck() {
+  if (opponentIndex >= 7) {
+    walkAway();
+    return;
+  }
 
-    function walkAway() {
-      currentPYL.finalScore = currentPYL.score;
-      currentPYL.streak = 0;
-      showTurnComplete();
-    }
+  currentPYL.streak += 1;
+  currentPYL.score += (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+  opponentIndex++;
 
-    function showTurnComplete() {
-      document.getElementById('gameScreen').classList.add('hidden');
-      document.getElementById('turnCompleteScreen').classList.remove('hidden');
-      document.getElementById('turnSummaryText').textContent =
-        `${currentPYL.name}'s turn is complete! Final Score: ${currentPYL.finalScore}`;
-    }
+  if (opponentIndex >= 7) {
+    walkAway();
+  } else {
+    updateDisplay();
+  }
+}
 
-    function nextTurn() {
-      currentPYL.score = 0;
-      currentPYL.streak = 0;
-      startTurn();
-    }
+function walkAway() {
+  currentPYL.finalScore = currentPYL.score;
+  currentPYL.streak = 0;
+  showTurnComplete();
+}
 
-    function updateDisplay() {
-      document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
-      document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
-      document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
+function showTurnComplete() {
+  document.getElementById('gameScreen').classList.add('hidden');
+  document.getElementById('turnCompleteScreen').classList.remove('hidden');
+  document.getElementById('turnSummaryText').textContent =
+    `${currentPYL.name}'s turn is complete! Final Score: ${currentPYL.finalScore}`;
+}
 
-      players.forEach(p => {
-        document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
-        document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
-        let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
-        document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
-      });
-    }
-    //TESTING DATA SECTION
-    function fillTestData() {
+function nextTurn() {
+  startTurn();
+}
+
+function updateDisplay() {
+  document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
+  document.getElementById("scoreColumn").innerHTML = "<strong>Score</strong>";
+  document.getElementById("pressColumn").innerHTML = "<strong>Press Streak</strong>";
+
+  players.forEach(p => {
+    document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
+    document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
+    let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
+    document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
+  });
+}
+
+function fillTestData() {
   const testNames = ["Zane", "Maya", "Leo", "Aria", "Nico", "Luna", "Kai", "Nova"];
   for (let i = 0; i < 8; i++) {
     document.getElementById(`name${i}`).value = testNames[i];
     document.getElementById(`rating${i}`).value = Math.floor(Math.random() * 1000) + 100;
   }
 }
-  </script>
+
+function showFinalStandings() {
+  let standings = "Final Standings\n\n";
+  allPlayers.sort((a, b) => b.finalScore - a.finalScore);
+  allPlayers.forEach((p, i) => {
+    standings += `${i + 1}. ${p.name}: ${p.finalScore}\n`;
+  });
+  alert(standings);
+
+  // Create CSV
+  let csv = "Player,Rating,Final Score\n";
+  allPlayers.forEach(p => {
+    csv += `${p.name},${p.rating},${p.finalScore}\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "pyl_final_scores.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 </body>
 </html>

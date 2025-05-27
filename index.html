@@ -79,6 +79,7 @@
       <h2>Press Your Luck Scoreboard</h2>
       <div class="controls">
         <button onclick="pressLuck()">Press Your Luck</button>
+        <button onclick="failPress()">Fail</button>
         <button onclick="walkAway()">Walk Away</button>
       </div>
       <div class="scoreboard">
@@ -246,6 +247,12 @@
       a.click();
       URL.revokeObjectURL(url);
     }
+    function failPress() {
+  currentPYL.score = 0;
+  currentPYL.streak = 0;
+  currentPYL.finalScore = -1;
+  showTurnComplete();
+}
 //PWA section
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')

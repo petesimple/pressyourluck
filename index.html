@@ -223,21 +223,21 @@
     }
 
     function pressLuck() {
-      if (opponentIndex >= currentPlayerCount - 1) {
-        walkAway();
-        return;
-      }
+  if (opponentIndex >= currentPlayerCount - 1) {
+    walkAway();
+    return;
+  }
 
-      currentPYL.streak += 1;
-      currentPYL.score += (currentPYL.streak * (currentPYL.streak + 1)) / 2;
-      opponentIndex++;
+  currentPYL.streak += 1;
+  currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+  opponentIndex++;
 
-      if (opponentIndex >= currentPlayerCount - 1) {
-        walkAway();
-      } else {
-        updateDisplay();
-      }
-    }
+  if (opponentIndex >= currentPlayerCount - 1) {
+    walkAway();
+  } else {
+    updateDisplay();
+  }
+}
 
     function walkAway() {
       currentPYL.finalScore = currentPYL.score;

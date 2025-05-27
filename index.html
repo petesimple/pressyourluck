@@ -265,15 +265,17 @@
   document.getElementById("pressColumn").innerHTML = "<strong>Streak</strong>";
   document.getElementById("totalColumn").innerHTML = "<strong>Total Score</strong>";
 
-  players.forEach(p => {
-    document.getElementById("playerColumn").innerHTML += `<div>${p.name}</div>`;
-    document.getElementById("ratingColumn").innerHTML += `<div>${p.rating}</div>`;
-    document.getElementById("scoreColumn").innerHTML += `<div>${p.score}</div>`;
+  players.forEach((p, i) => {
+    const highlightStyle = i === 0 ? " style='font-weight:bold; color:#ffd700;'" : "";
+
+    document.getElementById("playerColumn").innerHTML += `<div${highlightStyle}>${p.name}</div>`;
+    document.getElementById("ratingColumn").innerHTML += `<div${highlightStyle}>${p.rating}</div>`;
+    document.getElementById("scoreColumn").innerHTML += `<div${highlightStyle}>${p.score}</div>`;
 
     let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
-    document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
-    
-    document.getElementById("totalColumn").innerHTML += `<div>${p.totalScore}</div>`;
+    document.getElementById("pressColumn").innerHTML += `<div${highlightStyle}>${p.streak} (${streakPts} pts)</div>`;
+
+    document.getElementById("totalColumn").innerHTML += `<div${highlightStyle}>${p.totalScore}</div>`;
   });
 
   document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;

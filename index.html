@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +50,12 @@
     div > div {
       margin-bottom: 8px;
     }
+    #turnCompleteScreen {
+      text-align: center;
+      padding: 20px;
+      background: #333;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -59,9 +64,6 @@
     <div id="setupScreen">
       <h2>Game Setup - Press Your Luck</h2>
       <div id="playerInputs"></div>
-      <label for="pylSelect">Select PYL Starter:
-        <select id="pylSelect"></select>
-      </label><br/>
       <label>Number of Rounds:
         <select id="roundCount">
           <option value="5">5</option>
@@ -80,26 +82,27 @@
         <button onclick="walkAway()">Walk Away</button>
       </div>
       <div class="scoreboard">
-        <div class="column" id="playerColumn">
-          <strong>Player</strong>
-        </div>
-        <div class="column" id="scoreColumn">
-          <strong>Score</strong>
-        </div>
-        <div class="column" id="pressColumn">
-          <strong>Press Streak</strong>
-        </div>
+        <div class="column" id="playerColumn"><strong>Player</strong></div>
+        <div class="column" id="scoreColumn"><strong>Score</strong></div>
+        <div class="column" id="pressColumn"><strong>Press Streak</strong></div>
       </div>
+    </div>
+
+    <!-- TURN COMPLETE SCREEN -->
+    <div id="turnCompleteScreen" class="hidden">
+      <h2 id="turnSummaryText">Turn Complete!</h2>
+      <button onclick="nextTurn()">Next Challenger</button>
     </div>
   </div>
 
   <script>
-    let players = [];
-    let pylPlayer = null;
+    let allPlayers = [];
+    let pylQueue = [];
+    let currentPYL = null;
+    let opponents = [];
 
     window.onload = () => {
       const inputContainer = document.getElementById('playerInputs');
-      const select = document.getElementById('pylSelect');
       for (let i = 0; i < 8; i++) {
         inputContainer.innerHTML += `
           <div>
@@ -107,12 +110,11 @@
             <input type="number" id="rating${i}" placeholder="Rating" />
           </div>
         `;
-        select.innerHTML += `<option value="${i}">Player ${i + 1}</option>`;
       }
     };
 
     function startGame() {
-      players = [];
+      allPlayers = [];
       for (let i = 0; i < 8; i++) {
         const name = document.getElementById(`name${i}`).value.trim();
         const rating = parseInt(document.getElementById(`rating${i}`).value);
@@ -120,18 +122,53 @@
           alert("Please enter valid names and ratings for all players.");
           return;
         }
-        players.push({ name, rating, score: 0, streak: 0 });
+        allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0 });
       }
 
-      const pylIndex = parseInt(document.getElementById('pylSelect').value);
-      pylPlayer = players.splice(pylIndex, 1)[0]; // Remove and store PYL player
-      players.sort((a, b) => a.rating - b.rating); // Sort remaining players
-
-      players.unshift(pylPlayer); // Insert PYL at front for scoreboard display
-
+      pylQueue = [...allPlayers];
       document.getElementById('setupScreen').classList.add('hidden');
+      startTurn();
+    }
+
+    function startTurn() {
+      if (pylQueue.length === 0) {
+        alert("Game complete!");
+        return;
+      }
+
+      currentPYL = pylQueue.shift();
+      opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
+
+      players = [currentPYL, ...opponents];
+
+      document.getElementById('turnCompleteScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
       updateDisplay();
+    }
+
+    function pressLuck() {
+      currentPYL.streak += 1;
+      currentPYL.score += (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+      updateDisplay();
+    }
+
+    function walkAway() {
+      currentPYL.finalScore = currentPYL.score;
+      currentPYL.streak = 0;
+      showTurnComplete();
+    }
+
+    function showTurnComplete() {
+      document.getElementById('gameScreen').classList.add('hidden');
+      document.getElementById('turnCompleteScreen').classList.remove('hidden');
+      document.getElementById('turnSummaryText').textContent =
+        `${currentPYL.name}'s turn is complete! Final Score: ${currentPYL.finalScore}`;
+    }
+
+    function nextTurn() {
+      currentPYL.score = 0;
+      currentPYL.streak = 0;
+      startTurn();
     }
 
     function updateDisplay() {
@@ -146,28 +183,6 @@
         document.getElementById("pressColumn").innerHTML += `<div>${p.streak} (${streakPts} pts)</div>`;
       });
     }
-
-    function pressLuck() {
-      const current = players[0];
-      current.streak += 1;
-      current.score += (current.streak * (current.streak + 1)) / 2;
-      updateDisplay();
-    }
-
-    function walkAway() {
-  const current = players[0];
-  current.streak = 0;
-
-  // Move to next opponent if any
-  if (players.length > 2) {
-    const opponent = players.splice(1, 1)[0]; // Remove next opponent
-    players.push(opponent); // Put them at the end for scoreboard display
-  } else {
-    alert("Round complete! All opponents faced.");
-  }
-
-  updateDisplay();
-}
   </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
       margin: 0;
     }
     .container {
-      max-width: 700px;
+      max-width: 800px;
       margin: auto;
       background: #222;
       padding: 20px;
@@ -56,18 +57,18 @@
   <div class="container">
     <!-- SETUP SCREEN -->
     <div id="setupScreen">
-      <h2>Game Setup</h2>
-      <div id="playerInputs">
-        <!-- Player inputs dynamically generated -->
-      </div>
+      <h2>Game Setup - Press Your Luck</h2>
+      <div id="playerInputs"></div>
+      <label for="pylSelect">Select PYL Starter:
+        <select id="pylSelect"></select>
+      </label><br/>
       <label>Number of Rounds:
         <select id="roundCount">
           <option value="5">5</option>
           <option value="7" selected>7</option>
           <option value="9">9</option>
         </select>
-      </label>
-      <br/>
+      </label><br/>
       <button onclick="startGame()">Start Game</button>
     </div>
 
@@ -94,34 +95,39 @@
 
   <script>
     let players = [];
+    let pylPlayer = null;
 
-    // Create 3 player input rows
     window.onload = () => {
-      const container = document.getElementById('playerInputs');
-      for (let i = 0; i < 3; i++) {
-        container.innerHTML += `
+      const inputContainer = document.getElementById('playerInputs');
+      const select = document.getElementById('pylSelect');
+      for (let i = 0; i < 8; i++) {
+        inputContainer.innerHTML += `
           <div>
-            <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" required />
-            <input type="number" id="rating${i}" placeholder="Rating" required />
+            <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" />
+            <input type="number" id="rating${i}" placeholder="Rating" />
           </div>
         `;
+        select.innerHTML += `<option value="${i}">Player ${i + 1}</option>`;
       }
     };
 
     function startGame() {
       players = [];
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 8; i++) {
         const name = document.getElementById(`name${i}`).value.trim();
         const rating = parseInt(document.getElementById(`rating${i}`).value);
         if (!name || isNaN(rating)) {
-          alert("Please enter valid names and ratings.");
+          alert("Please enter valid names and ratings for all players.");
           return;
         }
         players.push({ name, rating, score: 0, streak: 0 });
       }
 
-      // Sort by rating (low to high) for Round 1
-      players.sort((a, b) => a.rating - b.rating);
+      const pylIndex = parseInt(document.getElementById('pylSelect').value);
+      pylPlayer = players.splice(pylIndex, 1)[0]; // Remove and store PYL player
+      players.sort((a, b) => a.rating - b.rating); // Sort remaining players
+
+      players.unshift(pylPlayer); // Insert PYL at front for scoreboard display
 
       document.getElementById('setupScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
@@ -142,7 +148,7 @@
     }
 
     function pressLuck() {
-      const current = players[0]; // For now, assume Player 1 is active
+      const current = players[0];
       current.streak += 1;
       current.score += (current.streak * (current.streak + 1)) / 2;
       updateDisplay();

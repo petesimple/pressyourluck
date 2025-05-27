@@ -22,10 +22,10 @@
     h2 {
       text-align: center;
     }
-    .controls, .scoreboard {
-      margin-top: 20px;
+    .hidden {
+      display: none;
     }
-    select, button {
+    input, select, button {
       padding: 10px;
       font-size: 1em;
       margin: 5px;
@@ -54,8 +54,12 @@
 </head>
 <body>
   <div class="container">
-    <h2>Press Your Luck Scoreboard</h2>
-    <div class="controls">
+    <!-- SETUP SCREEN -->
+    <div id="setupScreen">
+      <h2>Game Setup</h2>
+      <div id="playerInputs">
+        <!-- Player inputs dynamically generated -->
+      </div>
       <label>Number of Rounds:
         <select id="roundCount">
           <option value="5">5</option>
@@ -63,27 +67,66 @@
           <option value="9">9</option>
         </select>
       </label>
-      <button onclick="pressLuck()">Press Your Luck</button>
-      <button onclick="walkAway()">Walk Away</button>
+      <br/>
+      <button onclick="startGame()">Start Game</button>
     </div>
-    <div class="scoreboard">
-      <div class="column" id="playerColumn">
-        <strong>Player</strong>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" class="hidden">
+      <h2>Press Your Luck Scoreboard</h2>
+      <div class="controls">
+        <button onclick="pressLuck()">Press Your Luck</button>
+        <button onclick="walkAway()">Walk Away</button>
       </div>
-      <div class="column" id="scoreColumn">
-        <strong>Score</strong>
-      </div>
-      <div class="column" id="pressColumn">
-        <strong>Press Streak</strong>
+      <div class="scoreboard">
+        <div class="column" id="playerColumn">
+          <strong>Player</strong>
+        </div>
+        <div class="column" id="scoreColumn">
+          <strong>Score</strong>
+        </div>
+        <div class="column" id="pressColumn">
+          <strong>Press Streak</strong>
+        </div>
       </div>
     </div>
   </div>
+
   <script>
-    const players = [
-      { name: "Jane", score: 0, streak: 0 },
-      { name: "Alex", score: 0, streak: 0 },
-      { name: "Riley", score: 0, streak: 0 }
-    ];
+    let players = [];
+
+    // Create 3 player input rows
+    window.onload = () => {
+      const container = document.getElementById('playerInputs');
+      for (let i = 0; i < 3; i++) {
+        container.innerHTML += `
+          <div>
+            <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" required />
+            <input type="number" id="rating${i}" placeholder="Rating" required />
+          </div>
+        `;
+      }
+    };
+
+    function startGame() {
+      players = [];
+      for (let i = 0; i < 3; i++) {
+        const name = document.getElementById(`name${i}`).value.trim();
+        const rating = parseInt(document.getElementById(`rating${i}`).value);
+        if (!name || isNaN(rating)) {
+          alert("Please enter valid names and ratings.");
+          return;
+        }
+        players.push({ name, rating, score: 0, streak: 0 });
+      }
+
+      // Sort by rating (low to high) for Round 1
+      players.sort((a, b) => a.rating - b.rating);
+
+      document.getElementById('setupScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      updateDisplay();
+    }
 
     function updateDisplay() {
       document.getElementById("playerColumn").innerHTML = "<strong>Player</strong>";
@@ -99,7 +142,7 @@
     }
 
     function pressLuck() {
-      const current = players[0];
+      const current = players[0]; // For now, assume Player 1 is active
       current.streak += 1;
       current.score += (current.streak * (current.streak + 1)) / 2;
       updateDisplay();
@@ -110,8 +153,6 @@
       current.streak = 0;
       updateDisplay();
     }
-
-    updateDisplay();
   </script>
 </body>
 </html>

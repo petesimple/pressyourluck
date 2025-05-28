@@ -373,13 +373,20 @@ function undoLastPress() {
 }
 
     function goBackToGameScreen() {
-  // Undo final score application
+  // Undo final score
   if (typeof currentPYL.finalScore === 'number') {
     currentPYL.totalScore -= currentPYL.finalScore;
-    currentPYL.finalScore = null; // Or undefined
+    currentPYL.finalScore = null;
+
+    // ✅ Restore score/streak from pressHistory (last press before fail/walk)
+    const last = pressHistory[pressHistory.length - 1];
+    if (last && last.playerId === currentPYL.name) {
+      currentPYL.score = last.score;
+      currentPYL.streak = last.streak;
+    }
   }
 
-  // Show game screen again
+  // Return to gameplay screen
   document.getElementById('turnCompleteScreen').classList.add('hidden');
   document.getElementById('gameScreen').classList.remove('hidden');
   updateDisplay();

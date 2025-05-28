@@ -373,8 +373,16 @@ function undoLastPress() {
 }
 
     function goBackToGameScreen() {
+  // Undo final score application
+  if (typeof currentPYL.finalScore === 'number') {
+    currentPYL.totalScore -= currentPYL.finalScore;
+    currentPYL.finalScore = null; // Or undefined
+  }
+
+  // Show game screen again
   document.getElementById('turnCompleteScreen').classList.add('hidden');
   document.getElementById('gameScreen').classList.remove('hidden');
+  updateDisplay();
 }
        
     function recordPress(type, streak, score, finalScore, totalScore) {

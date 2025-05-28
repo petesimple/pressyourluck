@@ -145,6 +145,30 @@
       renderPlayerInputs();
     };
 
+    let logoHoldTimer;
+const HOLD_DURATION = 1200; // milliseconds to trigger hold
+
+document.getElementById('pylLogo').addEventListener('mousedown', () => {
+  logoHoldTimer = setTimeout(() => toggleTestMode(), HOLD_DURATION);
+});
+
+document.getElementById('pylLogo').addEventListener('mouseup', () => {
+  clearTimeout(logoHoldTimer);
+});
+document.getElementById('pylLogo').addEventListener('mouseleave', () => {
+  clearTimeout(logoHoldTimer);
+});
+
+function toggleTestMode() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("test") === "true") {
+    url.searchParams.delete("test");
+  } else {
+    url.searchParams.set("test", "true");
+  }
+  window.location.href = url.toString();
+}
+    
     function renderPlayerInputs() {
       const container = document.getElementById('playerInputs');
       container.innerHTML = '';

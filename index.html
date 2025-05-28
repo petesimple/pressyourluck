@@ -85,6 +85,30 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 10px;
 }
+    .input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.input-row input[type="text"] {
+  flex: 2;
+  max-width: 140px;
+}
+
+.input-row input[type="number"] {
+  flex: 1;
+  max-width: 80px;
+}
+    @media (max-width: 500px) {
+  .input-row {
+    flex-direction: column;
+  }
+
+  .input-row input {
+    max-width: 100%;
+  }
+}
   </style>
 </head>
 <body>

@@ -37,16 +37,32 @@
       border-radius: 6px;
     }
     .scoreboard {
-      display: flex;
-      justify-content: space-between;
-      background: #333;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .column {
-      flex: 1 1 20%;
-      padding: 0 5px;
-    }
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns: Player, Rating, Round Score, Streak, Total Score */
+  gap: 10px;
+  background: #333;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+    @media (max-width: 600px) {
+  .scoreboard {
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+  .column {
+    display: inline-block;
+    vertical-align: top;
+    width: 150px;
+  }
+}
     .column strong {
       display: block;
       margin-bottom: 5px;

@@ -378,11 +378,14 @@ function undoLastPress() {
     currentPYL.totalScore -= currentPYL.finalScore;
     currentPYL.finalScore = null;
 
-    // ✅ Restore score/streak from pressHistory (last press before fail/walk)
-    const last = pressHistory[pressHistory.length - 1];
-    if (last && last.playerId === currentPYL.name) {
-      currentPYL.score = last.score;
-      currentPYL.streak = last.streak;
+    // ✅ Find the last actual "press" entry in pressHistory
+    for (let i = pressHistory.length - 1; i >= 0; i--) {
+      const entry = pressHistory[i];
+      if (entry.playerId === currentPYL.name && entry.type === 'press') {
+        currentPYL.score = entry.score;
+        currentPYL.streak = entry.streak;
+        break;
+      }
     }
   }
 

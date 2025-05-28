@@ -182,11 +182,11 @@ function toggleTestMode() {
   container.innerHTML = '';
   for (let i = 0; i < currentPlayerCount; i++) {
     container.innerHTML += `
-      <div style="background:#333;padding:10px;border-radius:6px;">
-        <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" style="width: 100%; margin-bottom: 5px;" />
-        <input type="number" id="rating${i}" placeholder="Rating" style="width: 100%;" />
-      </div>
-    `;
+  <div class="input-row">
+    <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" />
+    <input type="number" id="rating${i}" placeholder="Rating" />
+  </div>
+`;
   }
 }
 

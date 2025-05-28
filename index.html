@@ -145,20 +145,6 @@
       renderPlayerInputs();
     };
 
-    let logoHoldTimer;
-const HOLD_DURATION = 1200; // milliseconds to trigger hold
-
-document.getElementById('pylLogo').addEventListener('mousedown', () => {
-  logoHoldTimer = setTimeout(() => toggleTestMode(), HOLD_DURATION);
-});
-
-document.getElementById('pylLogo').addEventListener('mouseup', () => {
-  clearTimeout(logoHoldTimer);
-});
-document.getElementById('pylLogo').addEventListener('mouseleave', () => {
-  clearTimeout(logoHoldTimer);
-});
-
 function toggleTestMode() {
   const url = new URL(window.location.href);
   if (url.searchParams.get("test") === "true") {
@@ -428,6 +414,44 @@ function undoLastPress() {
     finalScore,
     totalScore
   });
+}
+
+    // SHAKE TOGGLE TEST MODE
+let lastX = null, lastY = null, lastZ = null;
+const shakeThreshold = 15;
+let shakeCooldown = false;
+
+window.addEventListener("devicemotion", (event) => {
+  if (shakeCooldown) return;
+
+  const { x, y, z } = event.accelerationIncludingGravity;
+  if (lastX !== null) {
+    const deltaX = Math.abs(x - lastX);
+    const deltaY = Math.abs(y - lastY);
+    const deltaZ = Math.abs(z - lastZ);
+
+    if (deltaX + deltaY + deltaZ > shakeThreshold) {
+      shakeCooldown = true; // prevent spammy shake
+      confirmTestModeSwitch();
+      setTimeout(() => shakeCooldown = false, 2000);
+    }
+  }
+
+  lastX = x;
+  lastY = y;
+  lastZ = z;
+});
+
+function confirmTestModeSwitch() {
+  if (confirm("Test Mode switch?\n\n[OK] to toggle\n[Cancel] to stay")) {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("test") === "true") {
+      url.searchParams.delete("test");
+    } else {
+      url.searchParams.set("test", "true");
+    }
+    window.location.href = url.toString();
+  }
 }
   </script>
 </body>

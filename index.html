@@ -293,6 +293,16 @@
       });
     }
 
+    let lastTouchEnd = 0;
+
+  document.addEventListener('touchend', function (event) {
+    const now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault(); // Prevents double-tap zoom
+    }
+    lastTouchEnd = now;
+  }, false);
+
   function showFinalStandings() {
   allPlayers.sort((a, b) => b.totalScore - a.totalScore);
   const list = allPlayers.map((p, i) => {

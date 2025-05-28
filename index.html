@@ -109,6 +109,33 @@
     max-width: 100%;
   }
 }
+    .scoreboard-wrapper {
+  overflow-x: auto;
+  position: relative;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Optional subtle scroll indicator */
+.scoreboard-wrapper::after {
+  content: "← Scroll →";
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 0.8em;
+  color: #ccc;
+  background: rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+  animation: fadeout 6s forwards;
+}
+
+@keyframes fadeout {
+  0%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; }
+}
   </style>
 </head>
 <body>
@@ -148,13 +175,15 @@
         <button onclick="failPress()">Fail</button>
         <button id="undoPressBtn" onclick="undoLastPress()">Undo</button>
       </div>
+      <div class="scoreboard-wrapper">
       <div class="scoreboard">
   <div class="column" id="playerColumn"><strong>Player</strong></div>
   <div class="column" id="ratingColumn"><strong>Rating</strong></div>
   <div class="column" id="scoreColumn"><strong>Round Score</strong></div>
   <div class="column" id="pressColumn"><strong>Streak</strong></div>
   <div class="column" id="totalColumn"><strong>Total Score</strong></div>
-</div>
+      </div>
+      </div>
     </div>
 
     <div id="turnCompleteScreen" class="hidden">

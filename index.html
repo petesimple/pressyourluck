@@ -235,7 +235,7 @@
   currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
 
   // 🧠 Record this press for undo support
-  recordPress(currentPYL.name, currentPYL.score);
+  recordPress('press', currentPYL.streak, currentPYL.score, null, null);
 
   opponentIndex++;
   if (opponentIndex >= opponents.length) {
@@ -249,6 +249,7 @@
       currentPYL.finalScore = currentPYL.score;
       currentPYL.totalScore += currentPYL.finalScore;
       currentPYL.streak = 0;
+      recordPress('walk', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
       showTurnComplete();
     }
 
@@ -257,6 +258,7 @@
       currentPYL.totalScore += currentPYL.finalScore;
       currentPYL.score = 0;
       currentPYL.streak = 0;
+      recordPress('fail', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
       showTurnComplete();
     }
 
@@ -334,26 +336,49 @@
     
 function undoLastPress() {
   if (pressHistory.length === 0) {
-    alert("No press to undo.");
+    alert("No action to undo.");
     return;
   }
 
   const last = pressHistory.pop();
 
   if (last.playerId !== currentPYL.name) {
-    alert("You can only undo the current player's last press.");
+    alert("You can only undo the current player's last action.");
     return;
   }
 
-  if (currentPYL.streak > 0) {
-    currentPYL.streak -= 1;
-    currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
-    updateDisplay();
+  switch (last.type) {
+    case 'press':
+      if (currentPYL.streak > 0) {
+        currentPYL.streak -= 1;
+        currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+      }
+      break;
+    case 'walk':
+    case 'fail':
+      // Undo the score and return to active game screen
+      currentPYL.finalScore = 0;
+      currentPYL.totalScore = last.totalScore - last.finalScore;
+      currentPYL.score = last.score;
+      currentPYL.streak = last.streak;
+
+      document.getElementById('turnCompleteScreen').classList.add('hidden');
+      document.getElementById('gameScreen').classList.remove('hidden');
+      break;
   }
+
+  updateDisplay();
 }
     
-    function recordPress(playerId, roundResult) {
-  pressHistory.push({ playerId, roundResult });
+    function recordPress(type, streak, score, finalScore, totalScore) {
+  pressHistory.push({
+    playerId: currentPYL.name,
+    type,
+    streak,
+    score,
+    finalScore,
+    totalScore
+  });
 }
   </script>
 </body>

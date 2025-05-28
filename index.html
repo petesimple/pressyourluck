@@ -60,6 +60,9 @@
       background: #333;
       border-radius: 10px;
     }
+    #fillTestBtn {
+  display: none;
+}
   </style>
 </head>
 <body>
@@ -84,7 +87,7 @@
       <button onclick="addPlayer()">+ Add Player</button>
       <button onclick="removePlayer()">- Remove Player</button><br/>
       <button onclick="startGame()">Start Game</button>
-      <button onclick="fillTestData()">Fill Random Test Data</button>
+      <button id="fillTestBtn" onclick="fillTestData()">Fill Random Test Data</button>
       <p style="text-align:center; margin-top: 10px; font-size: 0.9em; color: #bbb;">
         Version <strong>v1.2</strong> – (Q)
       </p>
@@ -320,6 +323,15 @@
   document.getElementById("finalResultsScreen").classList.remove("hidden");
 }
 
+    window.onload = () => {
+  renderPlayerInputs();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('test') === 'true') {
+    document.getElementById('fillTestBtn').style.display = 'inline-block';
+  }
+};
+    
 function undoLastPress() {
   if (pressHistory.length === 0) {
     alert("No press to undo.");

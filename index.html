@@ -97,6 +97,7 @@
         <button onclick="pressLuck()">Press Your Luck</button>
         <button onclick="walkAway()">Walk Away</button>
         <button onclick="failPress()">Fail</button>
+        <button id="undoPressBtn">Undo Last Press</button>
       </div>
       <div class="scoreboard">
   <div class="column" id="playerColumn"><strong>Player</strong></div>
@@ -132,6 +133,7 @@
     let currentRound = 1;
     let totalRounds = 1;
     let roundOrder = [];
+    let pressHistory = []; // Store history of presses (could be score, player index, etc.)
 
     const testNamesPool = ["Zane", "Maya", "Leo", "Aria", "Nico", "Luna", "Kai", "Nova"];
 
@@ -229,10 +231,12 @@
   currentPYL.streak += 1;
   currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
 
+  // 🧠 Record this press for undo support
+  recordPress(currentPYL.name, currentPYL.score);
+
   opponentIndex++;
   if (opponentIndex >= opponents.length) {
-    opponentIndex = 0; // Loop back to the first opponent
-    // COMMENTED OUTALERT alert(`${currentPYL.name} is looping back to face the next round of challengers!`);
+    opponentIndex = 0;
   }
 
   updateDisplay();
@@ -314,6 +318,30 @@
   document.getElementById("turnCompleteScreen").classList.add("hidden");
   document.getElementById("finalStandingsList").innerHTML = list;
   document.getElementById("finalResultsScreen").classList.remove("hidden");
+}
+
+function undoLastPress() {
+  if (pressHistory.length === 0) {
+    alert("No press to undo.");
+    return;
+  }
+
+  const last = pressHistory.pop();
+
+  if (last.playerId !== currentPYL.name) {
+    alert("You can only undo the current player's last press.");
+    return;
+  }
+
+  if (currentPYL.streak > 0) {
+    currentPYL.streak -= 1;
+    currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+    updateDisplay();
+  }
+}
+    
+    function recordPress(playerId, roundResult) {
+  pressHistory.push({ playerId, roundResult });
 }
   </script>
 </body>

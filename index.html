@@ -113,7 +113,7 @@
 
     <div id="turnCompleteScreen" class="hidden">
       <h2 id="turnSummaryText">Turn Complete!</h2>
-      <button onclick="undoLastPress()" style="background:#444;">Undo Last Action</button>
+      <button onclick="undoLastPress()" style="background:#444;">BACK</button>
       <button onclick="nextTurn()">Next Challenger</button>
     </div>
     <div id="finalResultsScreen" class="hidden">
@@ -357,12 +357,12 @@ function undoLastPress() {
       break;
     case 'walk':
     case 'fail':
-      // Undo the score and return to active game screen
       currentPYL.finalScore = 0;
       currentPYL.totalScore = last.totalScore - last.finalScore;
       currentPYL.score = last.score;
       currentPYL.streak = last.streak;
 
+      // ✅ Return to game screen if backing out of walk/fail
       document.getElementById('turnCompleteScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
       break;

@@ -136,6 +136,25 @@
   90%  { opacity: 1; }
   100% { opacity: 0; }
 }
+    #roundQueueDisplay {
+  background: #222;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  text-align: left;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#roundQueueDisplay .active {
+  font-weight: bold;
+  color: #ffcc00;
+}
+.nextLabel {
+  margin-left: 8px;
+  color: #ffcc00;
+  font-size: 0.85em;
+}
   </style>
 </head>
 <body>
@@ -174,6 +193,7 @@
         <button onclick="walkAway()">Walk Away</button>
         <button onclick="failPress()">Fail</button>
         <button id="undoPressBtn" onclick="undoLastPress()">Undo</button>
+        <div id="roundQueueDisplay" style="margin-top: 10px;"></div>
       </div>
       <div class="scoreboard-wrapper">
       <div class="scoreboard">
@@ -320,6 +340,7 @@ function removePlayer() {
       }
 
       currentPYL = pylQueue.shift();
+        updateRoundQueueDisplay();      
       opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
       opponentIndex = 0;
       currentPYL.score = 0;
@@ -415,6 +436,16 @@ function removePlayer() {
     lastTouchEnd = now;
   }, false);
 
+    function updateRoundQueueDisplay() {
+  const container = document.getElementById('roundQueueDisplay');
+  const upcoming = [currentPYL, ...pylQueue];
+
+  container.innerHTML = `<strong>🎯 Turn Order:</strong><br/>` + upcoming.map((p, i) => {
+    const isActive = i === 0;
+    return `<div class="${isActive ? 'active' : ''}">${isActive ? '➡️ ' : ''}${p.name}${isActive ? ' <span class="nextLabel">(Up Next)</span>' : ''}</div>`;
+  }).join('');
+}
+    
   function showFinalStandings() {
   allPlayers.sort((a, b) => b.totalScore - a.totalScore);
   const list = allPlayers.map((p, i) => {

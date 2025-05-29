@@ -480,19 +480,25 @@ function removePlayer() {
 
     function updateRoundQueueDisplay() {
   const container = document.getElementById('roundQueueDisplay');
-  const nextPlayer = pylQueue[0];
+  const nextOffense = pylQueue[0];
+  const nextDefenderIndex = opponentIndex + 1;
+  const nextDefender = opponents[nextDefenderIndex];
 
-  if (!nextPlayer) {
-    container.innerHTML = "";
-    return;
+  let html = `<strong>🎯 Upcoming:</strong><br/>`;
+
+  html += `<div style="display: flex; gap: 20px; align-items: center;">`;
+
+  if (nextOffense) {
+    html += `<div class="nextLabel">${nextOffense.name} (Up Next)</div>`;
   }
 
-  container.innerHTML = `
-    <strong>Up Next:</strong>
-    <div class="nextLabel" style="font-size: 1.2em; font-weight: bold;">
-      ${nextPlayer.name}
-    </div>
-  `;
+  if (nextDefender) {
+    html += `<div class="defLabel">${nextDefender.name} (Next Defender)</div>`;
+  }
+
+  html += `</div>`;
+
+  container.innerHTML = html;
 }
     
   function showFinalStandings() {

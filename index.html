@@ -481,8 +481,7 @@ function removePlayer() {
     function updateRoundQueueDisplay() {
   const container = document.getElementById('roundQueueDisplay');
   const nextOffense = pylQueue[0];
-  const nextDefenderIndex = opponentIndex + 1;
-  const nextDefender = opponents[nextDefenderIndex];
+  const nextDefender = opponents[opponentIndex];
 
   let html = `<strong>🎯 Upcoming:</strong><br/>`;
 

@@ -540,22 +540,25 @@ function undoLastPress() {
       if (currentPYL.streak > 0) {
         currentPYL.streak -= 1;
         currentPYL.score = (currentPYL.streak * (currentPYL.streak + 1)) / 2;
+        opponentIndex = Math.max(opponentIndex - 1, 0);
       }
       break;
+
     case 'walk':
     case 'fail':
-      currentPYL.finalScore = 0;
+      currentPYL.finalScore = null;
       currentPYL.totalScore = last.totalScore - last.finalScore;
       currentPYL.score = last.score;
       currentPYL.streak = last.streak;
+      opponentIndex = last.opponentIndex ?? 0;
 
-      // ✅ Return to game screen if backing out of walk/fail
       document.getElementById('turnCompleteScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
       break;
   }
 
   updateDisplay();
+  updateRoundQueueDisplay();
 }
 
     function goBackToGameScreen() {
@@ -588,7 +591,8 @@ function undoLastPress() {
     streak,
     score,
     finalScore,
-    totalScore
+    totalScore,
+    opponentIndex 
   });
 }
 

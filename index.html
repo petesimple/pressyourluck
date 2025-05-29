@@ -155,6 +155,24 @@
   color: #ffcc00;
   font-size: 0.85em;
 }
+    .controls-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .controls-wrapper {
+    flex-direction: column;
+  }
+}
   </style>
 </head>
 <body>
@@ -181,20 +199,22 @@
       <button onclick="startGame()">Start Game</button>
       <button id="fillTestBtn" onclick="fillTestData()">Fill Random Test Data</button>
       <p style="text-align:center; margin-top: 10px; font-size: 0.9em; color: #bbb;">
-        Version <strong>v1.3.4</strong> – (Qundo)
+        Version <strong>v1.4</strong> – (upnext)
       </p>
     </div>
 
     <div id="gameScreen" class="hidden">
       <h2>Press Your Luck Scoreboard</h2>
       <div id="roundTracker" style="text-align:center; margin-bottom: 10px; font-weight: bold; font-size: 1.2em;"></div>
-      <div class="controls">
-        <button onclick="pressLuck()">Press Your Luck</button>
-        <button onclick="walkAway()">Walk Away</button>
-        <button onclick="failPress()">Fail</button>
-        <button id="undoPressBtn" onclick="undoLastPress()">Undo</button>
-        <div id="roundQueueDisplay" style="margin-top: 10px;"></div>
-      </div>
+      <div class="controls-wrapper">
+  <div class="controls">
+    <button onclick="pressLuck()">Press Your Luck</button>
+    <button onclick="walkAway()">Walk Away</button>
+    <button onclick="failPress()">Fail</button>
+    <button id="undoPressBtn" onclick="undoLastPress()">Undo</button>
+  </div>
+  <div id="roundQueueDisplay"></div>
+</div>
       <div class="scoreboard-wrapper">
       <div class="scoreboard">
   <div class="column" id="playerColumn"><strong>Player</strong></div>

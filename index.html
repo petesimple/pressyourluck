@@ -230,32 +230,48 @@ function toggleTestMode() {
   window.location.href = url.toString();
 }
     
-    function renderPlayerInputs() {
+    function getCurrentPlayerInputData() {
+  const data = [];
+  for (let i = 0; i < currentPlayerCount; i++) {
+    const nameInput = document.getElementById(`name${i}`);
+    const ratingInput = document.getElementById(`rating${i}`);
+    const name = nameInput ? nameInput.value.trim() : '';
+    const rating = ratingInput ? ratingInput.value.trim() : '';
+    data.push({ name, rating });
+  }
+  return data;
+}
+
+function renderPlayerInputs(data = []) {
   const container = document.getElementById('playerInputs');
   container.innerHTML = '';
   for (let i = 0; i < currentPlayerCount; i++) {
+    const name = data[i]?.name || '';
+    const rating = data[i]?.rating || '';
     container.innerHTML += `
-  <div class="input-row">
-    <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" />
-    <input type="number" id="rating${i}" placeholder="Rating" />
-  </div>
-`;
+      <div class="input-row">
+        <input type="text" id="name${i}" placeholder="Player ${i + 1} Name" value="${name}" />
+        <input type="number" id="rating${i}" placeholder="Rating" value="${rating}" />
+      </div>
+    `;
   }
 }
 
-    function addPlayer() {
-      if (currentPlayerCount < 9) {
-        currentPlayerCount++;
-        renderPlayerInputs();
-      }
-    }
+function addPlayer() {
+  if (currentPlayerCount < 9) {
+    const savedData = getCurrentPlayerInputData();
+    currentPlayerCount++;
+    renderPlayerInputs(savedData);
+  }
+}
 
-    function removePlayer() {
-      if (currentPlayerCount > 3) {
-        currentPlayerCount--;
-        renderPlayerInputs();
-      }
-    }
+function removePlayer() {
+  if (currentPlayerCount > 3) {
+    const savedData = getCurrentPlayerInputData();
+    currentPlayerCount--;
+    renderPlayerInputs(savedData);
+  }
+}
 
     function fillTestData() {
       for (let i = 0; i < currentPlayerCount; i++) {

@@ -480,22 +480,19 @@ function removePlayer() {
 
     function updateRoundQueueDisplay() {
   const container = document.getElementById('roundQueueDisplay');
-  const upcoming = [currentPYL, ...pylQueue];
+  const nextPlayer = pylQueue[0];
 
-  container.innerHTML = `<strong>🎯 Turn Order:</strong><br/>` + upcoming.map((p, i) => {
-    const isCurrent = i === 0;
-    const isNext = i === 1;
+  if (!nextPlayer) {
+    container.innerHTML = "";
+    return;
+  }
 
-    // Determine if this player is the current defender
-    const isDefender = !isCurrent && opponents[opponentIndex]?.name === p.name;
-
-    return `<div class="${isCurrent ? 'now-playing' : isDefender ? 'defender-active' : ''}">
-      ${isCurrent ? '🎯 ' : ''}${p.name}
-      ${isCurrent ? ' <span class="nowLabel">(Now Playing)</span>' : ''}
-      ${isNext && !isCurrent ? ' <span class="nextLabel">(Up Next)</span>' : ''}
-      ${isDefender ? ' <span class="defLabel">(Defending)</span>' : ''}
-    </div>`;
-  }).join('');
+  container.innerHTML = `
+    <strong>Up Next:</strong>
+    <div class="nextLabel" style="font-size: 1.2em; font-weight: bold;">
+      ${nextPlayer.name}
+    </div>
+  `;
 }
     
   function showFinalStandings() {

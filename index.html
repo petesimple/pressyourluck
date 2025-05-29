@@ -200,6 +200,21 @@
   color: #ff4444;
   font-size: 0.85em;
 }
+    .pip {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 6px;
+}
+
+.pip-now {
+  background-color: #00eaff; /* blue for Now Playing */
+}
+
+.pip-defending {
+  background-color: #ff4444; /* red for Defending */
+}
   </style>
 </head>
 <body>
@@ -460,9 +475,9 @@ function removePlayer() {
     }
 
     const label = p.name === currentPYL.name
-      ? ' <span class="nowLabel">(Now Playing)</span>'
+      ? ' <span class="pip pip-now" title="Now Playing"></span>'
       : p.name === opponents[opponentIndex]?.name
-      ? ' <span class="defLabel">(Defending)</span>'
+      ? ' <span class="pip pip-defending" title="Defending"></span>'
       : '';
 
     document.getElementById("playerColumn").innerHTML += `<div${highlightStyle}>${p.name}${label}</div>`;

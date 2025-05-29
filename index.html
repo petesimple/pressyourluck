@@ -453,7 +453,27 @@ function removePlayer() {
   document.getElementById("totalColumn").innerHTML = "<strong>Total Score</strong>";
 
   players.forEach((p, i) => {
-    const highlightStyle = i === 0 ? " style='font-weight:bold; color:#ffd700;'" : "";
+  let highlightStyle = "";
+  if (p.name === currentPYL.name) {
+    highlightStyle = " style='font-weight:bold; color:#ffd700;'"; // Now Playing
+  } else if (p.name === opponents[opponentIndex]?.name) {
+    highlightStyle = " style='font-weight:bold; color:#ff4444;'"; // Defending
+  }
+
+  const label = p.name === currentPYL.name
+    ? ' <span class="nowLabel">(Now Playing)</span>'
+    : p.name === opponents[opponentIndex]?.name
+    ? ' <span class="defLabel">(Defending)</span>'
+    : '';
+
+  document.getElementById("playerColumn").innerHTML += `<div${highlightStyle}>${p.name}${label}</div>`;
+  document.getElementById("ratingColumn").innerHTML += `<div${highlightStyle}>${p.rating}</div>`;
+  document.getElementById("scoreColumn").innerHTML += `<div${highlightStyle}>${p.score}</div>`;
+
+  let streakPts = p.streak > 0 ? (p.streak * (p.streak + 1)) / 2 : 0;
+  document.getElementById("pressColumn").innerHTML += `<div${highlightStyle}>${p.streak} (${streakPts} pts)</div>`;
+  document.getElementById("totalColumn").innerHTML += `<div${highlightStyle}>${p.totalScore}</div>`;
+});
 
     document.getElementById("playerColumn").innerHTML += `<div${highlightStyle}>${p.name}</div>`;
     document.getElementById("ratingColumn").innerHTML += `<div${highlightStyle}>${p.rating}</div>`;

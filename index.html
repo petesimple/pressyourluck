@@ -481,7 +481,6 @@ function removePlayer() {
     function updateRoundQueueDisplay() {
   const container = document.getElementById('roundQueueDisplay');
   const nextOffense = pylQueue[0];
-  const nextDefender = opponents[opponentIndex];
 
   let html = `<strong>🎯 Upcoming:</strong><br/>`;
 
@@ -489,10 +488,6 @@ function removePlayer() {
 
   if (nextOffense) {
     html += `<div class="nextLabel">${nextOffense.name} (Up Next)</div>`;
-  }
-
-  if (nextDefender) {
-    html += `<div class="defLabel">${nextDefender.name} (Next Defender)</div>`;
   }
 
   html += `</div>`;

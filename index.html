@@ -274,6 +274,9 @@
       <button onclick="nextTurn()">Next Challenger</button>
     </div>
     <div id="finalResultsScreen" class="hidden">
+      <div style="text-align:center; margin-bottom: 20px;">
+  <img id="pylLogo" src="PYLlogonoBG.png" alt="Press Your Luck Logo" style="max-width: 300px; width: 100%; height: auto;" />
+</div>
   <h2>🏁 Game Over – Final Standings 🏆</h2>
   <div id="finalStandingsList" style="text-align:left; margin-top: 20px;"></div>
   <div style="text-align:center; margin-top: 20px;">
@@ -496,15 +499,15 @@ function removePlayer() {
   const container = document.getElementById('roundQueueDisplay');
   const nextOffense = pylQueue[0];
 
-  let html = `<strong>🎯 Upcoming:</strong><br/>`;
-
-  html += `<div style="display: flex; gap: 20px; align-items: center;">`;
-
-  if (nextOffense) {
-    html += `<div class="nextLabel">${nextOffense.name} (Up Next)</div>`;
-  }
-
-  html += `</div>`;
+  const html = `
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <strong>🎯 Upcoming:</strong><br/>
+        ${nextOffense ? `<div class="nextLabel">${nextOffense.name}</div>` : ''}
+      </div>
+      <img src="PYLlogonoBG.png" alt="Logo" style="width: 40px; height: auto;" />
+    </div>
+  `;
 
   container.innerHTML = html;
 }

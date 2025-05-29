@@ -441,8 +441,12 @@ function removePlayer() {
   const upcoming = [currentPYL, ...pylQueue];
 
   container.innerHTML = `<strong>🎯 Turn Order:</strong><br/>` + upcoming.map((p, i) => {
-    const isActive = i === 0;
-    return `<div class="${isActive ? 'active' : ''}">${isActive ? '➡️ ' : ''}${p.name}${isActive ? ' <span class="nextLabel">(Up Next)</span>' : ''}</div>`;
+    const isCurrent = i === 0;
+    const isNext = i === 1;
+
+    return `<div class="${isCurrent ? 'active' : ''}">
+      ${isCurrent ? '➡️ ' : ''}${p.name}${isNext ? ' <span class="nextLabel">(Up Next)</span>' : ''}
+    </div>`;
   }).join('');
 }
     

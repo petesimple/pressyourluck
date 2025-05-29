@@ -173,6 +173,33 @@
     flex-direction: column;
   }
 }
+    .now-playing {
+  font-weight: bold;
+  color: #00eaff;
+}
+
+.nowLabel {
+  margin-left: 8px;
+  color: #00eaff;
+  font-size: 0.85em;
+}
+
+.nextLabel {
+  margin-left: 8px;
+  color: #ffcc00;
+  font-size: 0.85em;
+}
+
+.defender-active {
+  font-weight: bold;
+  color: #ff4444;
+}
+
+.defLabel {
+  margin-left: 8px;
+  color: #ff4444;
+  font-size: 0.85em;
+}
   </style>
 </head>
 <body>
@@ -464,8 +491,14 @@ function removePlayer() {
     const isCurrent = i === 0;
     const isNext = i === 1;
 
-    return `<div class="${isCurrent ? 'active' : ''}">
-      ${isCurrent ? '➡️ ' : ''}${p.name}${isNext ? ' <span class="nextLabel">(Up Next)</span>' : ''}
+    // Determine if this player is the current defender
+    const isDefender = !isCurrent && opponents[opponentIndex]?.name === p.name;
+
+    return `<div class="${isCurrent ? 'now-playing' : isDefender ? 'defender-active' : ''}">
+      ${isCurrent ? '🎯 ' : ''}${p.name}
+      ${isCurrent ? ' <span class="nowLabel">(Now Playing)</span>' : ''}
+      ${isNext && !isCurrent ? ' <span class="nextLabel">(Up Next)</span>' : ''}
+      ${isDefender ? ' <span class="defLabel">(Defending)</span>' : ''}
     </div>`;
   }).join('');
 }

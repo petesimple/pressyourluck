@@ -295,6 +295,7 @@
   </div>
 
   <script>
+    let gameLog = [];
     let allPlayers = [];
     let pylQueue = [];
     let currentPYL = null;
@@ -443,21 +444,47 @@ function removePlayer() {
 }
 
     function walkAway() {
-      currentPYL.finalScore = currentPYL.score;
-      currentPYL.totalScore += currentPYL.finalScore;
-      currentPYL.streak = 0;
-      recordPress('walk', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
-      showTurnComplete();
-    }
+  currentPYL.finalScore = currentPYL.score;
+  currentPYL.totalScore += currentPYL.finalScore;
+  currentPYL.streak = 0;
+
+  recordPress('walk', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
+
+  logTurn({
+    playerName: currentPYL.name,
+    roundNumber: currentRound,
+    currentScoreBeforeTurn: currentPYL.totalScore - currentPYL.finalScore,
+    pointsEarnedThisRound: currentPYL.finalScore,
+    actionTaken: "resigned",
+    cumulativeScoreAfterRound: currentPYL.totalScore,
+    defendersFaced: opponentIndex,
+    wasRisky: currentPYL.streak > 0
+  });
+
+  showTurnComplete();
+}
 
     function failPress() {
-      currentPYL.finalScore = -1;
-      currentPYL.totalScore += currentPYL.finalScore;
-      currentPYL.score = 0;
-      currentPYL.streak = 0;
-      recordPress('fail', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
-      showTurnComplete();
-    }
+  currentPYL.finalScore = -1;
+  currentPYL.totalScore += currentPYL.finalScore;
+  currentPYL.score = 0;
+  currentPYL.streak = 0;
+
+  recordPress('fail', currentPYL.streak, currentPYL.score, currentPYL.finalScore, currentPYL.totalScore);
+
+  logTurn({
+    playerName: currentPYL.name,
+    roundNumber: currentRound,
+    currentScoreBeforeTurn: currentPYL.totalScore - currentPYL.finalScore,
+    pointsEarnedThisRound: currentPYL.finalScore,
+    actionTaken: "failed",
+    cumulativeScoreAfterRound: currentPYL.totalScore,
+    defendersFaced: opponentIndex,
+    wasRisky: true
+  });
+
+  showTurnComplete();
+}
 
     function showTurnComplete() {
       document.getElementById('gameScreen').classList.add('hidden');
@@ -519,6 +546,29 @@ function removePlayer() {
 
   container.innerHTML = html;
 }
+
+    function logTurn({
+  playerName,
+  roundNumber,
+  currentScoreBeforeTurn,
+  pointsEarnedThisRound,
+  actionTaken, // "scored", "failed", "resigned"
+  cumulativeScoreAfterRound,
+  defendersFaced,
+  wasRisky
+}) {
+  gameLog.push({
+    playerName,
+    roundNumber,
+    currentScoreBeforeTurn,
+    pointsEarnedThisRound,
+    actionTaken,
+    cumulativeScoreAfterRound,
+    defendersFaced,
+    wasRisky,
+    timestamp: Date.now()
+  });
+}
     
   function showFinalStandings() {
   allPlayers.sort((a, b) => b.totalScore - a.totalScore);
@@ -531,6 +581,7 @@ function removePlayer() {
   document.getElementById("turnCompleteScreen").classList.add("hidden");
   document.getElementById("finalStandingsList").innerHTML = list;
   document.getElementById("finalResultsScreen").classList.remove("hidden");
+    console.log("Game Log:", gameLog);
 }
 
     window.onload = () => {

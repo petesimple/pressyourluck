@@ -606,10 +606,10 @@ function removePlayer() {
     let title = "Player";
 
     if (p.riskyMoves >= 3 && p.fails >= 2) {
-      title = "🎲 The Gambler";
-    } else if (p.resigns >= Math.ceil(p.roundsPlayed * 0.7)) {
-      title = "❄️ The Ice King";
-    } else if (variance >= 15) {
+  title = "🎲 The Gambler";
+} else if (p.resigns >= Math.ceil(p.roundsPlayed * 0.7) && p.roundsPlayed >= 3) {
+  title = "❄️ The Ice King";
+} else if (variance >= 15) {
       title = "🎢 The Roller Coaster";
     } else if (p.scores.slice(-1)[0] > 10 && p.fails > 0) {
       title = "💥 The Flameout";

@@ -569,6 +569,59 @@ function removePlayer() {
     timestamp: Date.now()
   });
 }
+
+    function generatePlayerStories() {
+  const playerData = {};
+
+  gameLog.forEach(entry => {
+    const name = entry.playerName;
+
+    if (!playerData[name]) {
+      playerData[name] = {
+        scores: [],
+        riskyMoves: 0,
+        resigns: 0,
+        fails: 0,
+        totalPoints: 0,
+        roundsPlayed: 0
+      };
+    }
+
+    const p = playerData[name];
+    p.scores.push(entry.pointsEarnedThisRound);
+    if (entry.wasRisky) p.riskyMoves++;
+    if (entry.actionTaken === 'resigned') p.resigns++;
+    if (entry.actionTaken === 'failed') p.fails++;
+    p.totalPoints = entry.cumulativeScoreAfterRound;
+    p.roundsPlayed++;
+  });
+
+  const stories = [];
+
+  for (const name in playerData) {
+    const p = playerData[name];
+    const maxScore = Math.max(...p.scores);
+    const minScore = Math.min(...p.scores);
+    const variance = maxScore - minScore;
+    let title = "Player";
+
+    if (p.riskyMoves >= 3 && p.fails >= 2) {
+      title = "🎲 The Gambler";
+    } else if (p.resigns >= Math.ceil(p.roundsPlayed * 0.7)) {
+      title = "❄️ The Ice King";
+    } else if (variance >= 15) {
+      title = "🎢 The Roller Coaster";
+    } else if (p.scores.slice(-1)[0] > 10 && p.fails > 0) {
+      title = "💥 The Flameout";
+    } else if (p.totalPoints > 0 && p.scores.slice(0, 2).every(s => s < 2)) {
+      title = "📈 The Climber";
+    }
+
+    stories.push(`${title}: ${name} – ${p.totalPoints} pts`);
+  }
+
+  return stories;
+}
     
   function showFinalStandings() {
   allPlayers.sort((a, b) => b.totalScore - a.totalScore);
@@ -580,6 +633,10 @@ function removePlayer() {
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("turnCompleteScreen").classList.add("hidden");
   document.getElementById("finalStandingsList").innerHTML = list;
+    
+    const stories = generatePlayerStories();
+document.getElementById("finalStandingsList").innerHTML += `<hr><strong>Storylines:</strong><br>${stories.join('<br>')}`;
+    
   document.getElementById("finalResultsScreen").classList.remove("hidden");
     console.log("Game Log:", gameLog);
 }

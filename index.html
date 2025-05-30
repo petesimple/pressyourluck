@@ -215,6 +215,14 @@
 .pip-defending {
   background-color: #ff4444; /* red for Defending */
 }
+    #floatingLogo {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 100px;
+  height: auto;
+  z-index: 1000;
+}
   </style>
 </head>
 <body>
@@ -256,6 +264,7 @@
     <button id="undoPressBtn" onclick="undoLastPress()">Undo</button>
   </div>
   <div id="roundQueueDisplay"></div>
+        <img id="floatingLogo" src="PYLlogonoBG.png" alt="Logo" />
 </div>
       <div class="scoreboard-wrapper">
       <div class="scoreboard">

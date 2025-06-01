@@ -414,17 +414,15 @@ function removePlayer() {
   });
 }
     function startRound() {
-      if (currentRound > 1) {
-    reseedPlayers(); // 🔁 Use the correct reordering from Round 2 onward
-        console.log(`🔄 Round ${currentRound} Order:`, allPlayers.map(p => `${p.name} (${p.totalScore} pts)`));
-        document.getElementById("roundOrderDisplay").innerHTML =
-  `<strong>🔄 Round ${currentRound} Order:</strong> ` +
-  allPlayers.map(p => `${p.name} (${p.totalScore} pts)`).join(' | ');
+  if (currentRound > 1) {
+    reseedPlayers(); // Sorts and updates allPlayers in-place
   }
-      roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
-      pylQueue = [...roundOrder];
-      startTurn();
-    }
+
+  roundOrder = allPlayers.map(p => ({ ...p })); // optional clone
+  pylQueue = [...allPlayers];
+
+  startTurn();
+}
 
     function startTurn() {
       if (pylQueue.length === 0) {

@@ -387,7 +387,7 @@ function removePlayer() {
       alert("Please enter valid names and ratings for all players.");
       return;
     }
-    allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0 });
+    allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0, previousPosition: i });
   }
 
   // 🔧 Fix for Round 1 ordering by rating
@@ -397,7 +397,24 @@ function removePlayer() {
   startRound();
 }
 
+    function reseedPlayers() {
+  // Sort by totalScore (ascending), with previousPosition as tie-breaker
+  allPlayers.sort((a, b) => {
+    if (a.totalScore !== b.totalScore) {
+      return a.totalScore - b.totalScore;
+    }
+    return a.previousPosition - b.previousPosition;
+  });
+
+  // After sorting, update previousPosition for next round
+  allPlayers.forEach((p, index) => {
+    p.previousPosition = index;
+  });
+}
     function startRound() {
+      if (currentRound > 1) {
+    reseedPlayers(); // 🔁 Use the correct reordering from Round 2 onward
+  }
       roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
       pylQueue = [...roundOrder];
       startTurn();

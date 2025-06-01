@@ -414,6 +414,7 @@ function removePlayer() {
     function startRound() {
       if (currentRound > 1) {
     reseedPlayers(); // 🔁 Use the correct reordering from Round 2 onward
+        console.log(`🔄 Round ${currentRound} Order:`, allPlayers.map(p => `${p.name} (${p.totalScore} pts)`));
   }
       roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
       pylQueue = [...roundOrder];

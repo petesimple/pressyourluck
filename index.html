@@ -276,6 +276,7 @@
       </div>
       </div>
     </div>
+    <div id="roundOrderDisplay" style="margin-top: 20px; font-style: italic; color: #ccc;"></div>
 
     <div id="turnCompleteScreen" class="hidden">
       <h2 id="turnSummaryText">Turn Complete!</h2>
@@ -415,6 +416,9 @@ function removePlayer() {
       if (currentRound > 1) {
     reseedPlayers(); // 🔁 Use the correct reordering from Round 2 onward
         console.log(`🔄 Round ${currentRound} Order:`, allPlayers.map(p => `${p.name} (${p.totalScore} pts)`));
+        document.getElementById("roundOrderDisplay").innerHTML =
+  `<strong>🔄 Round ${currentRound} Order:</strong> ` +
+  allPlayers.map(p => `${p.name} (${p.totalScore} pts)`).join(' | ');
   }
       roundOrder = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
       pylQueue = [...roundOrder];

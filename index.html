@@ -249,7 +249,7 @@
       <button onclick="startGame()">Start Game</button>
       <button id="fillTestBtn" onclick="fillTestData()">Fill Random Test Data</button>
       <p style="text-align:center; margin-top: 10px; font-size: 0.9em; color: #bbb;">
-        Version <strong>v1.5.3</strong> – (mitic)
+        Version <strong>v1.5.4</strong> – (mitic)
       </p>
     </div>
 
@@ -451,14 +451,14 @@ function removePlayer() {
   currentPYL = pylQueue.shift();
   updateRoundQueueDisplay();
 
-  // ✅ Updated defender sort logic based on round number
+  // ✅ Updated defender sorting
   opponents = allPlayers
     .filter(p => p !== currentPYL)
     .sort((a, b) => {
       if (currentRound === 1) {
         return a.rating - b.rating;
       }
-      return a.totalScore - b.totalScore || a.previousPosition - b.previousPosition;
+      return a.totalScore - b.totalScore || a.rating - b.rating;
     });
 
   opponentIndex = 0;

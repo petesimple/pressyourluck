@@ -389,11 +389,24 @@ function removePlayer() {
       alert("Please enter valid names and ratings for all players.");
       return;
     }
-    allPlayers.push({ name, rating, score: 0, streak: 0, finalScore: 0, totalScore: 0, previousPosition: i });
+    allPlayers.push({
+      name,
+      rating,
+      score: 0,
+      streak: 0,
+      finalScore: 0,
+      totalScore: 0,
+      previousPosition: 0 // placeholder, will set below
+    });
   }
 
-  // 🔧 Fix for Round 1 ordering by rating
+  // 🔧 Sort by rating for Round 1
   allPlayers.sort((a, b) => a.rating - b.rating);
+
+  // ✅ Set initial previousPosition based on rating order
+  allPlayers.forEach((p, index) => {
+    p.previousPosition = index;
+  });
 
   document.getElementById('setupScreen').classList.add('hidden');
   startRound();

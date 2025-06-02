@@ -438,29 +438,39 @@ function removePlayer() {
 }
 
     function startTurn() {
-      if (pylQueue.length === 0) {
-        currentRound++;
-        if (currentRound > totalRounds) {
-          showFinalStandings();
-        } else {
-          startRound();
-        }
-        return;
-      }
-
-      currentPYL = pylQueue.shift();
-        updateRoundQueueDisplay();      
-      opponents = allPlayers.filter(p => p !== currentPYL).sort((a, b) => a.rating - b.rating);
-      opponentIndex = 0;
-      currentPYL.score = 0;
-      currentPYL.streak = 0;
-      players = [currentPYL, ...opponents];
-      
-      document.getElementById('turnCompleteScreen').classList.add('hidden');
-      document.getElementById('gameScreen').classList.remove('hidden');
-      document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
-      updateDisplay();
+  if (pylQueue.length === 0) {
+    currentRound++;
+    if (currentRound > totalRounds) {
+      showFinalStandings();
+    } else {
+      startRound();
     }
+    return;
+  }
+
+  currentPYL = pylQueue.shift();
+  updateRoundQueueDisplay();
+
+  // ✅ Updated defender sort logic based on round number
+  opponents = allPlayers
+    .filter(p => p !== currentPYL)
+    .sort((a, b) => {
+      if (currentRound === 1) {
+        return a.rating - b.rating;
+      }
+      return a.totalScore - b.totalScore || a.previousPosition - b.previousPosition;
+    });
+
+  opponentIndex = 0;
+  currentPYL.score = 0;
+  currentPYL.streak = 0;
+  players = [currentPYL, ...opponents];
+
+  document.getElementById('turnCompleteScreen').classList.add('hidden');
+  document.getElementById('gameScreen').classList.remove('hidden');
+  document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
+  updateDisplay();
+}
 
     function pressLuck() {
   currentPYL.streak += 1;

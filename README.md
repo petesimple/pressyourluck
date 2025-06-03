@@ -1,85 +1,89 @@
+# 🎯 Press Your Luck – Air Hockey Scoreboard  
+*A strategic, chaotic multiplayer scoring app for live group air hockey matches*
 
-# Press Your Luck – Air Hockey Scoreboard
-
-**Version:** v1.4.3 (upnext)
-
-A web-based scorekeeping tool designed for a dynamic air hockey format called **Press Your Luck** — built for anywhere from 3 to 9 players. This app supports a multi-round elimination and scoring structure with undo functionality, test mode, and mobile-optimized rules guidance.
+![PYL Logo](./PYLlogonoBG.png)
 
 ---
 
-## 🎮 Gameplay Summary
+## ⚡ Overview
 
-**Player Count:** 3 to 9 recommended (5–7 ideal)
+Press Your Luck (PYL) is a triangular scoring system built for air hockey tournaments and group night mayhem.  
+Players take turns on offense, facing defenders one at a time. After each goal?  
+You can cash out your points or... PRESS YOUR LUCK.
 
-**Rounds:** 7 by default
-
-**Objective:** Score the most points after all rounds are completed.
-
----
-
-## 🧠 Core Features
-
-- ⚙️ **Game Setup:** Add/remove players (3–9), enter name and rating
-- 🧪 **Test Mode:** Shake device to toggle test features like auto-fill
-- 🧾 **Floating Rulebook:** Mobile-friendly How to Play button
-- 🔁 **Turn Flow:** Offense faces defenders one by one in rating order
-- 🎲 **Press / Walk / Fail** buttons track scoring logic
-- ⬅️ **Undo (Qundo):** Reverse last press, walk, or fail
-- 📱 **Mobile-first layout** with scrollable scoreboards
-- 📊 **Live Tracker:** Streak and point total updates on the fly
-- 🔁 **Reseeding Logic:** Auto-sorts players by score after each round
-- 🏁 **Final Standings:** Auto-generated medal placements at game end
+One miss? You lose everything that round.  
+Resign early? You lock your score — but were you a coward or a genius?
 
 ---
 
-## 💡 Rules Summary (v1.0)
+## 🥚 What's New in v1.5.5 – (eastereggs)
 
-**Turn Options:**
-- ✅ **Resign:** Keep current round score
-- 🎯 **Press Your Luck:** Attempt to score — risk losing all points
-- ❌ **Fail:** Defender scores on you = -1 round score
+- 🌟 **Dynamic Storymode Titles**  
+  Get post-game player titles based on how you played:  
+  *The Gambler*, *The Ice King*, *The Flameout*, and more.
 
-**Scoring Formula:**
-- n successful presses = `n(n+1)/2` points
+- 🐣 **Hidden Easter Eggs**  
+  Unlock secret titles by:
+  - Shaking your device  
+  - Naming yourself creatively (👀 yes, emoji counts)  
+  - Playing wildly conservative or recklessly aggressive  
+  - Typing “Konami”… just sayin’.
 
-**Rotation:** Defenders rotate in from lowest to highest rating
-
-**End of Round:** All players take a turn, then reseed by total score
-
-**Game End:** Highest score after 7 rounds wins
-
----
-
-## 🔐 Hidden Dev Features
-
-- `?test=true` in the URL reveals Test Mode buttons
-- Device shake triggers Test Mode toggle with confirmation
+- 📖 **Lorebook Unlocked**  
+  [Download the Unofficial PYL Lorebook](./PYL_Lorebook_v1.0.pdf)  
+  It documents the mythical titles, questionable legends, and how to maybe-not-quite unlock them.
 
 ---
 
-## 🧰 Changelog
+## 🎮 Features
 
-### v1.4.3 – (upnext)
-- Updated **Round Queue Display** to only show the "Up Next" player (offense)
-- Temporarily **removed** the "Next Defender" display to avoid confusion
-- Fixed **Undo Button Logic**:
-  - Restores previous streak, score, and opponent index
-  - Returns to gameplay screen if walk/fail is undone
-  - Now also updates the round queue display correctly
-- Maintained scoreboard UI with piped values, bold highlighting for offense and defense
-- Version label updated in setup screen
-
-### v1.4.2 – (upnext)
-- New **compact turn info panel** shows both upcoming offense and next defender
-- Aligned the two info tags horizontally for easier scanning
-- Improved defender highlighting logic
-
-### v1.4.1 – (upnext)
-- Added **dynamic turn queue tracking**
-- Shows current player, defending player, and who's up next
-- Added labels (Now Playing, Defending, Up Next)
-- Compact and mobile-friendly scoreboard layout
+- Supports 3 to 9 players
+- Re-seeds turn order after each round based on score
+- Triangular score system (1, 3, 6, 10…)
+- Live UI for score, streak, and defender status
+- Full match summary + storymode at the end
+- Test Mode toggle (shake or `?test=true`)
+- Easter eggs, jokes, and a healthy dose of chaos
 
 ---
 
-Made with 💛 for the Air Hockey community
+## 🚀 How to Use
+
+1. Open `index.html` in your browser (mobile-friendly, installable as PWA).
+2. Enter player names and ratings.
+3. Press "Start Game".
+4. During each player's turn:
+   - Press 🟡 "Press Your Luck"
+   - Or tap 🟢 "Walk Away"
+   - Or ⚠️ "Fail" if they miss
+5. Enjoy chaos.
+6. Read the storymode summary and try to figure out what just happened.
+
+---
+
+## 🧪 Pro Tips
+
+- Use emojis in your name 😏  
+- Try unusual patterns (all walkaways, no fails, full press)  
+- Shake your phone. Seriously.  
+- Don’t trust the scoreboard. It’s watching. 👁️
+
+---
+
+## 🛸 Contribute
+
+Pull requests welcome — especially if you can code more weird titles, animations, or hidden rituals.
+
+---
+
+## 🧾 Credits
+
+Built by Pete Lippincott & the Air Hockey R&D Dungeon  
+Thanks to Goran, Q, and the entire practice squad for bravely testing narrative volatility.
+
+---
+
+## 📜 License
+
+This game is open-source, absurd, and meant for fun.  
+Please use it responsibly — or recklessly — as long as you enjoy it.

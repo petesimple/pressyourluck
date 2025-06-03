@@ -1,7 +1,7 @@
 # 🎯 Press Your Luck – Air Hockey Scoreboard  
 *A strategic, chaotic multiplayer scoring app for live group air hockey matches*
 
-![PYL Logo](./PYLlogonoBG.png)
+![PYL Logo](./icon-512.png)
 
 ---
 

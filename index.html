@@ -473,6 +473,7 @@ function removePlayer() {
   document.getElementById('gameScreen').classList.remove('hidden');
   document.getElementById("roundTracker").textContent = `Round ${currentRound} of ${totalRounds}`;
   updateDisplay();
+      updateOnDeckDisplay();
 }
 
     function pressLuck() {

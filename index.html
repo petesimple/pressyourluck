@@ -587,14 +587,14 @@ function removePlayer() {
   const container = document.getElementById('roundQueueDisplay');
   const nextOffense = pylQueue[0];
 
-  const html = 
+  const html = `
     <div style="display: flex; align-items: center; justify-content: space-between;">
       <div>
         <strong>🎯 Upcoming:</strong><br/>
-        ${nextOffense ? <div class="nextLabel">${nextOffense.name}</div> : ''}
+        ${nextOffense ? `<div class="nextLabel">${nextOffense.name}</div>` : ''}
       </div>
     </div>
-  ;
+  `;
 
   container.innerHTML = html;
 }

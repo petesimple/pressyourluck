@@ -578,20 +578,15 @@ function removePlayer() {
     function updateRoundQueueDisplay() {
   const container = document.getElementById('roundQueueDisplay');
   const nextOffense = pylQueue[0];
-  const onDeckOffense = pylQueue[1];
 
-  const html = `
-    <div style="display: flex; justify-content: space-around; text-align: center;">
+  const html = 
+    <div style="display: flex; align-items: center; justify-content: space-between;">
       <div>
-        <strong style="color: red;">🎯 Offensive:</strong><br/>
-        ${nextOffense ? `<div class="nextLabel" style="color: red;">${nextOffense.name}</div>` : '<div>-</div>'}
-      </div>
-      <div>
-        <strong style="color: pink;">🕑 On Deck:</strong><br/>
-        ${onDeckOffense ? `<div class="nextLabel" style="color: pink;">${onDeckOffense.name}</div>` : '<div>-</div>'}
+        <strong>🎯 Upcoming:</strong><br/>
+        ${nextOffense ? <div class="nextLabel">${nextOffense.name}</div> : ''}
       </div>
     </div>
-  `;
+  ;
 
   container.innerHTML = html;
 }

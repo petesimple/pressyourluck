@@ -602,7 +602,9 @@ function removePlayer() {
 
       function updateOnDeckDisplay() {
   const container = document.getElementById('onDeckDisplay');
-  const onDeckPlayer = opponents[opponentIndex + 1];
+
+  const currentIndex = roundOrder.findIndex(p => p.name === currentPYL.name);
+  const onDeckPlayer = roundOrder[currentIndex + 1];
 
   container.innerHTML = onDeckPlayer
     ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckPlayer.name}</span>`

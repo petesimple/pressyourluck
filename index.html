@@ -602,10 +602,7 @@ function removePlayer() {
 
       function updateOnDeckDisplay() {
   const container = document.getElementById('onDeckDisplay');
-
-  // Find index of the current offensive player in roundOrder
-  const offensiveIndex = roundOrder.findIndex(p => p.name === currentPYL.name);
-  const onDeckPlayer = roundOrder[offensiveIndex + 1];
+  const onDeckPlayer = pylQueue[0]; // Next offensive player waiting in queue
 
   container.innerHTML = onDeckPlayer
     ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckPlayer.name}</span>`

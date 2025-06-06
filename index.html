@@ -485,13 +485,13 @@ function removePlayer() {
 
   opponentIndex++;
   if (opponentIndex >= opponents.length) {
-    opponentIndex = 0;
+    opponentIndex = 0; // Loop back if needed (or maybe end turn here instead?)
   }
 
-  updateDisplay();
-      updateRoundQueue();         // or whatever updates queue/turn
-      updateRoundOrderDisplay();  // redraws scoreboard queue
-      updateOnDeckDisplay();      // updates pink label next to it
+  // 🖥 Update the game visuals
+  updateDisplay();              // updates main display (current score, etc.)
+  updateRoundOrderDisplay();   // updates the scoreboard display
+  updateOnDeckDisplay();       // ✅ updates the "On Deck" opponent
 }
 
     function walkAway() {
@@ -602,9 +602,7 @@ function removePlayer() {
 
       function updateOnDeckDisplay() {
   const container = document.getElementById('onDeckDisplay');
-
-  const offensiveIndex = roundOrder.findIndex(p => p.name === currentPYL.name);
-  const onDeckPlayer = roundOrder[offensiveIndex + 1];
+  const onDeckPlayer = opponents[opponentIndex + 1];
 
   container.innerHTML = onDeckPlayer
     ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckPlayer.name}</span>`

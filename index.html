@@ -603,16 +603,21 @@ function removePlayer() {
       function updateOnDeckDisplay() {
   const container = document.getElementById('onDeckDisplay');
 
-  const currentIndex = roundOrder.findIndex(p => p.name === currentPYL.name);
-  let onDeckPlayer = roundOrder[currentIndex + 1];
-
-  // 🔁 Loop to top if current player is last
-  if (!onDeckPlayer && roundOrder.length > 1) {
-    onDeckPlayer = roundOrder[0];
+  // Find the red-colored name cell in the scoreboard
+  const redCell = document.querySelector('.scoreboard .redName');
+  if (!redCell) {
+    container.innerHTML = `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">—</span>`;
+    return;
   }
 
-  container.innerHTML = onDeckPlayer
-    ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckPlayer.name}</span>`
+  // Get the row that redCell is in
+  const redRow = redCell.closest('tr');
+  const nextRow = redRow?.nextElementSibling || redRow?.parentElement?.firstElementChild;
+
+  const onDeckName = nextRow?.querySelector('.name')?.textContent;
+
+  container.innerHTML = onDeckName
+    ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckName}</span>`
     : `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">—</span>`;
 }
 

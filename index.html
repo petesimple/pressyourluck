@@ -604,7 +604,12 @@ function removePlayer() {
   const container = document.getElementById('onDeckDisplay');
 
   const currentIndex = roundOrder.findIndex(p => p.name === currentPYL.name);
-  const onDeckPlayer = roundOrder[currentIndex + 1];
+  let onDeckPlayer = roundOrder[currentIndex + 1];
+
+  // 🔁 Loop to top if current player is last
+  if (!onDeckPlayer && roundOrder.length > 1) {
+    onDeckPlayer = roundOrder[0];
+  }
 
   container.innerHTML = onDeckPlayer
     ? `<strong>🕑 On Deck:</strong><br/><span style="color: pink;">${onDeckPlayer.name}</span>`
